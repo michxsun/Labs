@@ -1,0 +1,12 @@
+My partner and I implemented AddingMachine with one while loop using the JustStarting boolean variable to determine when to return the total and terminate upon receiving a consecutive zero. 
+
+The other implementation with two while loops would work similarly. There may be a counter of how many times a zero has been inputed. Upon receiving a zero as input, the counter would be incremented by one and once the counter reaches two, the program would output the total and terminate the program. On the other hand, if a non-zero integer is inputed following a zero input, then the counter would be decremented to restart the count. The code would probably be contained within the second while loop to run under the condition that <zero_counter> is less than 2. This represents one of probably many other ways of implementing the AddingMachine with two while loops. 
+
+We prefer the one loop version just because it avoids the complexity of using two loops.
+
+The one loop version is preferred since it is relatively simple in that it uses JustStarting (boolean) as an "on/off" switch. Furthermore, it also seems much less verbose than a double while loop would be. The structure is simple: initialize variables, conditional statements to check for consecutive/single zero inputs, and incementing total/subtotal. 
+
+The two loop version of AddingMachine may turn out to be more intuitive - depending on the individual of course. While loops are usually easy to follow since they operate over only one conditional statement - making it easy to understand and terminate as desired. More so, the while loop might not even require the use of the justStarting boolean and reduces the complexity of many variables.
+
+Steven Truong - cs61b-BL
+Eric Huynh - cs61bl-BU
