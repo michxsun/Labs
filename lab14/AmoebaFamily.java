@@ -43,6 +43,9 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba>{
 	// later you will write print() that has more interesting formatting
 	public void printFlat() {
 		// Your goal is to make this as similar as possible to addChild
+		if (myRoot != null) {
+			myRoot.printNameFlat();
+		}
 	}
 
 	// Print the names of all amoebas in the family.
@@ -54,6 +57,9 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba>{
 	// Bill, Hilary, Fred, Wilma, auntie
     // This is the pretty print exercise.
 	public void print() {
+		if (myRoot != null) {
+			myRoot.printName(0);
+		}
 	}
 
 	// returns the length of the longest name in the Amoeba Family
@@ -69,7 +75,18 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba>{
 	public String longestName() {
 		// your goal is to make this look as similar as possible to
 		// longestNameLength
+		if (myRoot != null) {
+			return myRoot.longestName();
+		}
 		return "";
+	}
+	
+	// return size of the tree
+	public int size() {
+		if (myRoot != null) {
+			return myRoot.size();
+		}
+		return 0;
 	}
 
 	// Return an iterator of the amoeba family.
@@ -93,6 +110,8 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba>{
 		family.addChild("Marge", "Hilary");
 		System.out.println("Here's the family:");
 		family.print();
+//		family.printFlat();
+		System.out.println(family.size());
 	}
 
 	public class AmoebaIterator implements Iterator<Amoeba> {
@@ -175,6 +194,38 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba>{
         		myName = newName;
         	}
         }
+        
+        public int size() {
+        	int size = 1;
+        	for (Amoeba a: myChildren) {
+        		size += a.size();
+        	}
+        	return size;
+        }
+        
+        public void printNameFlat() {
+        	System.out.println(myName);
+        	for (Amoeba a : myChildren) {
+        		a.printNameFlat();
+        	}
+        }
+        
+        public void printName(int level) {
+        	System.out.println(helperIndent(level) + myName);
+        	for (Amoeba a : myChildren) {
+        		a.printName(level + 1);
+        	}
+        }
+        
+        public String helperIndent(int level) {
+        	String indent = "";
+        	String indent_space = "    ";
+        	for (int i = 0; i < level; i ++) {
+        		// make spaces
+        		indent = indent + indent_space;
+        	}
+        	return indent;
+        }
 
         //Returns the length of the longest name of this Amoeba's children
         public int longestNameLength() {
@@ -183,6 +234,20 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba>{
                 maxLengthSeen = Math.max(maxLengthSeen, a.longestNameLength());
             }
             return maxLengthSeen;
+        }
+        
+        //Returns the longest string name
+        
+        public String longestName() {
+        	String longestSeen = myName;
+        	for (Amoeba a : myChildren) {
+        		String compareString = a.longestName();
+        		int maxLengthSeen = Math.max(longestSeen.length(), compareString.length());
+        		if (maxLengthSeen == compareString.length()) {
+        			longestSeen = compareString;
+        		}
+        	}
+        	return longestSeen;
         }
     }
 } 
