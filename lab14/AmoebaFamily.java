@@ -88,6 +88,14 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba>{
 		}
 		return 0;
 	}
+	
+	// return the height of the tree
+	public int height() {
+		if (myRoot != null) {
+			return myRoot.height();
+		}
+		return 0;
+	}
 
 	// Return an iterator of the amoeba family.
 	public Iterator<Amoeba> iterator() {
@@ -111,7 +119,14 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba>{
 		System.out.println("Here's the family:");
 		family.print();
 //		family.printFlat();
+		System.out.println();
+		System.out.println("Size/Height");
 		System.out.println(family.size());
+		System.out.println(family.height());
+		System.out.println();
+		System.out.println("Longest name");
+		System.out.println(family.longestName());
+		System.out.println(family.longestNameLength());
 	}
 
 	public class AmoebaIterator implements Iterator<Amoeba> {
@@ -201,6 +216,19 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba>{
         		size += a.size();
         	}
         	return size;
+        }
+        
+        // compute the height of a node
+        private int height() {
+        	if (myChildren.isEmpty()) {
+        		return 1;
+        	} else {
+        		int bestSoFar = 1;
+        		for (Amoeba a : myChildren) {
+        			bestSoFar = Math.max(a.height(), bestSoFar);
+        		}
+        		return bestSoFar;
+        	}
         }
         
         public void printNameFlat() {
