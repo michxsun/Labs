@@ -22,12 +22,21 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba>{
 	// Makes all Amoeba names only lower case letters.
 	public void makeNamesLowercase() {
 		// Your goal is to make this as similar as possible to addChild
+		if (myRoot != null) {
+			myRoot.myName = myRoot.myName.toLowerCase();
+			for (Amoeba a : myRoot.myChildren) {
+				a.makeNameLowerCase();
+			}
+		}
 	}
 
 	// Replaces the name of an amoeba named currentName with the name newName.
 	// Precondition: the amoeba family contains exactly one amoeba named currentName.
 	public void replaceName(String currentName, String newName) {
 		// Your goal is to make this as similar as possible to addChild
+		if (myRoot != null) {
+			myRoot.replaceName(currentName, newName);
+		}
 	}
 
 	// Print the names of all amoebas in the family, one on each line.
@@ -152,6 +161,20 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba>{
         }
 
         //Add more void recursive functions below
+        public void makeNameLowerCase() {
+        	myName = myName.toLowerCase();
+        	if (myChildren != null) {
+        		for (Amoeba a : myChildren) {
+            		a.makeNameLowerCase();
+            	}
+        	}
+        }
+        
+        public void replaceName (String currentName, String newName) {
+        	if (myName.equals(newName)) {
+        		myName = newName;
+        	}
+        }
 
         //Returns the length of the longest name of this Amoeba's children
         public int longestNameLength() {
