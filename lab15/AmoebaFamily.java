@@ -115,6 +115,11 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba>{
 		System.out.println(family.longestName() + " has the longest name.");
 		System.out.println("Here's the family:");
 		family.print();
+		System.out.println();
+		Iterator fam = family.iterator();
+		while(fam.hasNext()) {
+			System.out.println(fam.next());
+		}
 	}
 
 	public class AmoebaIterator implements Iterator<Amoeba> {
@@ -146,12 +151,12 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba>{
 				throw new NoSuchElementException("tree ran out of elements");
 			}
 			Amoeba a = (Amoeba) fringe.pop();
-			
+			Collections.reverse(a.myChildren);
 			for (Amoeba child : a.myChildren) {
 				fringe.push(child);
 			}
-			
 			return a;
+			
 		}
 
 		public void remove() {
