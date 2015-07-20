@@ -1,6 +1,9 @@
+import java.util.ArrayList;
+
 public class BinaryTree {
 
     private TreeNode myRoot;
+    private ArrayList alreadySeen;
 
     public BinaryTree() {
         myRoot = null;
@@ -73,26 +76,31 @@ public class BinaryTree {
     public static void main(String[] args) {
         BinaryTree t;
         t = new BinaryTree();
-        print(t, "the empty tree");
-        t.fillSampleTree1();
-        print(t, "sample tree 1");
-        t.fillSampleTree2();
-        print(t, "sample tree 2");
-        t.fillSampleTree3();
-        print(t, "sample tree 3");
-        
-        t.fillSampleTree1();
-        System.out.println(t.height());
-        System.out.println(t.isCompletelyBalanced());
-        t.fillSampleTree2();
-        System.out.println(t.height());
-        System.out.println(t.isCompletelyBalanced());
-        t.fillSampleTree3();
-        System.out.println(t.height());
-        System.out.println(t.isCompletelyBalanced());
+//        print(t, "the empty tree");
+//        t.fillSampleTree1();
+//        print(t, "sample tree 1");
+//        t.fillSampleTree2();
+//        print(t, "sample tree 2");
+//        t.fillSampleTree3();
+//        print(t, "sample tree 3");
+//        
+//        t.fillSampleTree1();
+//        System.out.println(t.height());
+//        System.out.println(t.isCompletelyBalanced());
+//        t.fillSampleTree2();
+//        System.out.println(t.height());
+//        System.out.println(t.isCompletelyBalanced());
+//        t.fillSampleTree3();
+//        System.out.println(t.height());
+//        System.out.println(t.isCompletelyBalanced());
+//        t.fillSampleTree4();
+//        System.out.println(t.height());
+//        System.out.println(t.isCompletelyBalanced());
+//        System.out.println();
+//        t.fillSampleTree3();
+//        t.print();
         t.fillSampleTree4();
-        System.out.println(t.height());
-        System.out.println(t.isCompletelyBalanced());
+        System.out.println(t.check());
         
         
         
@@ -105,12 +113,123 @@ public class BinaryTree {
         t.printInorder();
         System.out.println();
     }
+    
+    public void print() {
+        if (myRoot != null) {
+            myRoot.print(0);
+        }
+    }
+    
+    public boolean check() {
+    	alreadySeen = new ArrayList();
+    	try {
+    		isOK(myRoot);
+    		return true;
+    	} catch (IllegalStateException e) {
+    		return false;
+    	}
+    }
+    
+    private void isOK(TreeNode t) throws IllegalStateException {
+    	if (alreadySeen.contains(t.myItem)) {
+    		throw new IllegalStateException();
+    	} else {
+    		alreadySeen.add(t.myItem);
+    		if (t.myLeft != null) {
+    			isOK(t.myLeft);
+    		}
+    		if(t.myRight != null) {
+    			isOK(t.myRight);
+    		}
+    	}
+    }
+    
+    public static BinaryTree fibTree(int n) {
+    	BinaryTree result = new BinaryTree();
+    	result.myRoot = result.fibTreeHelper(n);
+    	return result;
+    }
+    
+    private TreeNode fibTreeHelper(int n) {
+    	if (n == 0) {
+    		return new TreeNode(0);
+    	} else if (n == 1) {
+    		return new TreeNode(1);
+    	} else {
+    		TreeNode left = fibTreeHelper(n-1);
+    		TreeNode right = fibTreeHelper(n-2);
+    		return new TreeNode((Integer) left.myItem + (Integer) right.myItem, left, right);
+    	}
+    }
+    
+    public static BinaryTree exprTree(String s) {
+        BinaryTree result = new BinaryTree();
+        result.myRoot = result.exprTreeHelper(s);
+        return result;
+    }
+    
+    // Return the tree corresponding to the given arithmetic expression.
+    // The expression is legal, fully parenthesized, contains no blanks, 
+    // and involves only the operations + and *.
+    private TreeNode exprTreeHelper(String expr) {
+    	// done initializing operand list 
+        if (expr.charAt(0) != '(') {
+            return new TreeNode(); // you fill this in
+        } else {
+            // expr is a parenthesized expression.
+            // Strip off the beginning and ending parentheses,
+            // find the main operator (an occurrence of + or * not nested
+            // in parentheses, and construct the two subtrees.
+            int nesting = 0;
+            int opPos = 0;
+            for (int k = 1; k < expr.length() - 1; k++) {
+                // you supply the missing code
+            	if (nesting == 0) {										// not nested, look for operands 
+            		if (expr.charAt(k) == '+' || expr.charAt(k) == '*') {			// checks if we have an operand 
+            			opPos = k;
+            		}
+            	}
+            	if (expr.charAt(k) == "(") {							// entering a nest
+            		nesting++;
+            	} else if (expr.charAt(k) == ")") {					// exiting a nest 
+            		nesting--;
+            	}
+            }
+            String opnd1 = expr.substring(1, opPos);
+            String opnd2 = expr.substring(opPos + 1, expr.length() - 1);
+            String op = expr.substring(opPos, opPos + 1);
+            System.out.println("expression = " + expr);
+            System.out.println("operand 1  = " + opnd1);
+            System.out.println("operator   = " + op);
+            System.out.println("operand 2  = " + opnd2);
+            System.out.println();
+            return exprTreeHelper(op + opand1 + opand2); // you fill this in
+        }
+    }
 
     private static class TreeNode {
 
         public Object myItem;
         public TreeNode myLeft;
         public TreeNode myRight;
+        private static final String indent1 = "    ";
+
+        private void print(int indent) {
+            if (myRight != null) {
+            	myRight.print(indent+1);
+            }
+            println (myItem, indent);
+            if (myLeft != null) {
+            	myLeft.print(indent+1);
+            }
+        }
+
+        private static void println(Object obj, int indent) {
+            for (int k=0; k<indent; k++) {
+                System.out.print(indent1);
+            }
+            System.out.println(obj);
+        }
 
         public TreeNode(Object obj) {
             myItem = obj;

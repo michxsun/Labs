@@ -134,26 +134,26 @@ public class AmoebaFamily implements Iterable<AmoebaFamily.Amoeba>{
 
 		// You will supply the details of this class in a future lab.
 		
-		private Stack fringe = new Stack();
+		private Queue<Amoeba> fringe = new LinkedList<Amoeba>();
 		
 		public AmoebaIterator() {
 			if (myRoot != null) {
-				fringe.push(myRoot);
+				fringe.add(myRoot);
 			}
 		}
 
 		public boolean hasNext() {
-			return !fringe.empty();
+			return !fringe.isEmpty();
 		}
 
 		public Amoeba next() {
 			if (!hasNext()) {
 				throw new NoSuchElementException("tree ran out of elements");
 			}
-			Amoeba a = (Amoeba) fringe.pop();
-			Collections.reverse(a.myChildren);
+			Amoeba a = (Amoeba) fringe.remove();
+			
 			for (Amoeba child : a.myChildren) {
-				fringe.push(child);
+				fringe.add(child);
 			}
 			return a;
 			
