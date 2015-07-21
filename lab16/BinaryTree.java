@@ -1,6 +1,9 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Iterator;
 import java.util.Stack;
 import java.util.NoSuchElementException;
+
 
 public class BinaryTree<T> implements Iterable<T> {
 
@@ -12,6 +15,61 @@ public class BinaryTree<T> implements Iterable<T> {
 
     public BinaryTree(TreeNode t) {
         myRoot = t;
+    }
+    
+    
+    public BinaryTree(ArrayList<T> PREORDER, ArrayList<T> INORDER) {
+    	System.out.println("this is INORDER: " + INORDER.toString());
+    	System.out.println("this is PREORDER: " + PREORDER.toString());
+    	TreeNode CONSTRUCTING;
+    	if (PREORDER.isEmpty()) {
+    		myRoot = null;
+    	} else {
+        	T root_item = PREORDER.get(0);
+        	System.out.println(root_item);
+        	CONSTRUCTING = new TreeNode(root_item);					// construct a node without its child first
+        	// build the child recursively
+        	if (PREORDER.size() == 1) {
+        		myRoot = CONSTRUCTING;
+        	} else {																	// recursive case 
+        		// get the root position in INORDER 
+            	int root_index_INORDER = INORDER.indexOf(root_item);
+            	// split inorder to get left and right side of the tree
+            	System.out.println("root index in order is: " + root_index_INORDER);
+            	System.out.println("inorder size is: " + INORDER.size());
+            	ArrayList<T> RIGHT_INORDER = new ArrayList<T>(INORDER.subList(root_index_INORDER + 1, INORDER.size()));
+            	ArrayList<T> LEFT_INORDER = new ArrayList<T>(INORDER.subList(0, root_index_INORDER));
+
+            	// get left and right items of the tree
+            	ArrayList<T> LEFT_PREORDER;
+            	ArrayList<T> RIGHT_PREORDER;
+            	try {
+            		T left_item = LEFT_INORDER.get(LEFT_INORDER.size() - 1);
+            		LEFT_PREORDER = new ArrayList<T>(PREORDER.subList(1, PREORDER.indexOf(left_item) + 1));
+            	} catch (IndexOutOfBoundsException e) {
+            		T left_item = null;
+            		LEFT_PREORDER = new ArrayList<T>();
+            	}
+            	try {
+            		T right_item = RIGHT_INORDER.get(RIGHT_INORDER.size() - 1);
+            		RIGHT_PREORDER = new ArrayList<T>( PREORDER.subList(PREORDER.indexOf(right_item), PREORDER.size()));
+            	} catch (IndexOutOfBoundsException e) {
+            		T right_item = null;
+            		RIGHT_PREORDER =  new ArrayList<T>();
+            	}
+            	//Split things into sublists 
+
+            	
+            	
+            	BinaryTree left_TREE = new BinaryTree(LEFT_PREORDER, LEFT_INORDER);
+            	BinaryTree right_TREE = new BinaryTree(RIGHT_PREORDER, RIGHT_INORDER);
+            	CONSTRUCTING.myLeft = (TreeNode) left_TREE.myRoot;
+            	CONSTRUCTING.myRight = (TreeNode) right_TREE.myRoot;
+        	}
+        	myRoot = CONSTRUCTING;
+    	}
+
+    	
     }
 
     // Print the values in the tree in preorder: root value first,
@@ -37,6 +95,7 @@ public class BinaryTree<T> implements Iterable<T> {
             System.out.println();
         }
     }
+    
 
     public static BinaryTree<String> fillSampleTree1() {
         BinaryTree<String> t = new BinaryTree<String>();
@@ -49,14 +108,34 @@ public class BinaryTree<T> implements Iterable<T> {
         t.myRoot = t.new TreeNode("a", t.new TreeNode("b", t.new TreeNode("d", t.new TreeNode("e"), t.new TreeNode("f")), null), t.new TreeNode("c"));
         return t;
     }
+    
 
     public static void main(String[] args) {
-        BinaryTree<String> t = new BinaryTree<String>();
-        print(t, "the empty tree");
-        BinaryTree<String> s = fillSampleTree1();
-        print(s, "sample tree 1");
-        BinaryTree<String> r = fillSampleTree2();
-        print(r, "sample tree 2");
+//        BinaryTree<String> t = new BinaryTree<String>();
+//        print(t, "the empty tree");
+//        BinaryTree<String> s = fillSampleTree1();
+//        print(s, "sample tree 1");
+//        BinaryTree<String> r = fillSampleTree2();
+//        print(r, "sample tree 2");
+        ArrayList<String> preorder = new ArrayList<String>();
+        preorder.add("A");
+        preorder.add("B");
+        preorder.add("C");
+//        preorder.add("D");
+//        preorder.add("E");
+//        preorder.add("F");
+        ArrayList<String> inorder = new ArrayList<String>();
+        inorder.add("B");
+        inorder.add("A");
+//        inorder.add("E");
+//        inorder.add("D");
+//        inorder.add("F");
+        inorder.add("C");
+        
+        BinaryTree<String> yolo = new BinaryTree<String>(preorder, inorder);
+        print(yolo, "hope this works");
+        
+        
     }
 
     protected static void print(BinaryTree<?> t, String description) {
@@ -66,6 +145,7 @@ public class BinaryTree<T> implements Iterable<T> {
         t.printInorder();
         System.out.println();
     }
+    
 
     // Method for the BinaryTree class
     public Iterator<T> iterator(){
